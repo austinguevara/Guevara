@@ -23,7 +23,7 @@ namespace ImgUp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        private string mruToken = null;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
@@ -64,8 +64,40 @@ namespace ImgUp
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            if (e.PageState != null && e.PageState.ContainsKey("mruToken"))
+            {
+                object value = null;
+                if (e.PageState.TryGetValue("mruToken", out value))
+                {
+                    if (value != null)
+                    {
+                        mruToken = value.ToString();
+
+                        // Open the file via the token that you stored when adding this file into the MRU list.
+                        Windows.Storage.StorageFile file =
+                            await Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.GetFileAsync(mruToken);
+
+                        if (file != null)
+                        {
+                            // Open a stream for the selected file.
+                            Windows.Storage.Streams.IRandomAccessStream fileStream =
+                                await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+
+                            // Set the image source to a bitmap.
+                            Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
+                                new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+
+                            bitmapImage.SetSource(fileStream);
+                            nullImg.Source = bitmapImage;
+
+                            // Set the data context for the page.
+                            this.DataContext = file;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -78,6 +110,10 @@ namespace ImgUp
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            if (!string.IsNullOrEmpty(mruToken))
+            {
+                e.PageState["mruToken"] = mruToken;
+            }
         }
 
         #region NavigationHelper registration
@@ -146,6 +182,8 @@ namespace ImgUp
                 bitmapImage.SetSource(fileStream);
                 nullImg.Source = bitmapImage;
                 this.DataContext = file;
+
+                mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
             }
         }
 
@@ -171,6 +209,11 @@ namespace ImgUp
             {
                 this.Frame.Navigate(typeof(MainPage));
             }
+        }
+
+        private void addToGallery_Button(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
