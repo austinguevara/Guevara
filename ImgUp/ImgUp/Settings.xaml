@@ -46,5 +46,16 @@
             <TextBlock x:Name="pageTitle" Text="Settings" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
+        <Grid Grid.Row="1" Margin="120,0,60,60">
+            <StackPanel Grid.Row="1" Margin="120,30,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
+                    <TextBox x:Name="nameInput" Width="300" HorizontalAlignment="Left" Text="Username"/>
+                    <Button Content="Update Username" VerticalAlignment="Bottom" Margin="10,0,0,0" Click="button_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="greetingOutput" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <Button Content="Delete Gallery" VerticalAlignment="Center" HorizontalAlignment="Left" Click="deleteGallery_Button" Margin="310,0,0,0"/>
+                <TextBlock x:Name="greetingOutput2" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

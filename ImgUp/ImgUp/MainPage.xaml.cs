@@ -23,6 +23,7 @@ namespace ImgUp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        int buttonCount = 0;
         private string mruToken = null;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -185,6 +186,7 @@ namespace ImgUp
 
                 mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 addToGallery.Content = "Add to Gallery";
+                buttonCount = 0;
             }
         }
 
@@ -214,8 +216,17 @@ namespace ImgUp
 
         private void addToGallery_Button(object sender, RoutedEventArgs e)
         {
+            //mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+            if (buttonCount == 0)
+            {
+                addToGallery.Content = "Go to Gallery>";
+                buttonCount += 1;
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(Gallery));
+            }
             
-            addToGallery.Content = "Go to Gallery>";
         }
     }
 }

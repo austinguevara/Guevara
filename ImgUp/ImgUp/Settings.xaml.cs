@@ -102,5 +102,16 @@ namespace ImgUp
         }
 
         #endregion
+
+        private void deleteGallery_Button(object sender, RoutedEventArgs e)
+        {
+            Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Clear();
+            greetingOutput.Text = "All images have been deleted from the gallery.";
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            greetingOutput.Text = "Your username has been reset to " + nameInput.Text + ".";
+        }
     }
 }
