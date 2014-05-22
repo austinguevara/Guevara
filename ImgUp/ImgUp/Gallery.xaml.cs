@@ -27,6 +27,7 @@ namespace ImgUp
     /// </summary>
     public sealed partial class Gallery : Page
     {
+        int entryCount = 0;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
@@ -72,30 +73,41 @@ namespace ImgUp
             AccessListEntryView entries = StorageApplicationPermissions.MostRecentlyUsedList.Entries;
             if (entries.Count > 0)
             {
-                //foreach (AccessListEntry entry in entries)
-                //Get first token in most recently used items list, assign it to "mruFirstToken"
-                String mruFirstToken = StorageApplicationPermissions.MostRecentlyUsedList.Entries[0].Token;
-
-                //Assign the file of first token to "retrievedFile"
-                StorageFile retrievedFile = await StorageApplicationPermissions.MostRecentlyUsedList.GetFileAsync(mruFirstToken);
-                Windows.Storage.Streams.IRandomAccessStream stream = await retrievedFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
-                this.DataContext = retrievedFile;
-
-                //Check that file is correct filetype
-                if (retrievedFile.FileType == ".bmp" ||
-                    retrievedFile.FileType == ".png" ||
-                    retrievedFile.FileType == ".jpeg" ||
-                    retrievedFile.FileType == ".jpg" ||
-                    retrievedFile.FileType == ".gif")
+                foreach (AccessListEntry entry in entries)
                 {
-                    //Create new "blank" bitmap
-                    Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-                            new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+                    //Get first token in most recently used items list, assign it to "mruFirstToken"
+                    String mruFirstToken = StorageApplicationPermissions.MostRecentlyUsedList.Entries[entryCount].Token;
 
-                    bitmapImage.SetSource(stream);
-                    Image newImg = new Image();
-                    newImg.Source = bitmapImage;
-                    itemGridView.Items.Add(newImg);
+                    //Increment entry count
+                    entryCount += 1;
+
+                    //Assign the file of first token to "retrievedFile" & create new stream
+                    StorageFile retrievedFile = await StorageApplicationPermissions.MostRecentlyUsedList.GetFileAsync(mruFirstToken);
+                    Windows.Storage.Streams.IRandomAccessStream stream = await retrievedFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                    this.DataContext = retrievedFile;
+
+                    //Check that file is correct filetype
+                    if (retrievedFile.FileType == ".bmp" ||
+                        retrievedFile.FileType == ".png" ||
+                        retrievedFile.FileType == ".jpeg" ||
+                        retrievedFile.FileType == ".jpg" ||
+                        retrievedFile.FileType == ".gif")
+                    {
+                        //Create new "blank" bitmap
+                        Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
+                                new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+
+                        //Set bitmap's source to newly created steam
+                        bitmapImage.SetSource(stream);
+
+                        //New image created and source assigned to bitmap
+                        Image newImg = new Image();
+                        newImg.Source = bitmapImage;
+                        newImg.Height = 200;
+
+                        //Item added to grid
+                        itemGridView.Items.Add(newImg);
+                    }
                 }
             }
         }
