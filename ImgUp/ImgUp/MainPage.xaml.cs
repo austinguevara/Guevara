@@ -184,6 +184,7 @@ namespace ImgUp
                 this.DataContext = file;
 
                 mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
+                addToGallery.Content = "Add to Gallery";
             }
         }
 
@@ -213,7 +214,8 @@ namespace ImgUp
 
         private void addToGallery_Button(object sender, RoutedEventArgs e)
         {
-
+            
+            addToGallery.Content = "Go to Gallery>";
         }
     }
 }

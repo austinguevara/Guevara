@@ -64,7 +64,7 @@
                 <RowDefinition Height="70"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Content="Select New Image" Click="GetPhotoButton_Click"/>
+            <Button Content="Select New Image" Click="GetPhotoButton_Click" FontSize="28" Height="56"/>
             <TextBlock x:Name="imageTitle" Grid.Row="1" TextWrapping="Wrap" Text="{Binding DisplayName}" Style="{StaticResource SubheaderTextBlockStyle}"/>
             <StackPanel x:Name="nullImgPanel" Grid.Row="2" Orientation="Horizontal" Margin="0">
                 <Border BorderBrush="#FF464646" BorderThickness="1" Background="#FF464646">
@@ -77,7 +77,7 @@
                     <TextBlock TextWrapping="Wrap" Text="{Binding Path}" Style="{StaticResource imgInfo}" Margin="0,0,0,50"/>
                     <Button Content="DATE CREATED" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="#FF00A0B1" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0" FontSize="20" Width="250" IsHitTestVisible="False"/>
                     <TextBlock TextWrapping="Wrap" Text="{Binding DateCreated.Date}" Style="{StaticResource imgInfo}" Margin="0,0,0,50"/>
-                    <Button x:Name="addToGallery" Content="Add to Gallery" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="38" Width="131"/>
+                    <Button x:Name="addToGallery" Content="Add to Gallery" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="250" Click="addToGallery_Button" FontSize="28" Height="56" Foreground="#FF1D1D1D" BorderBrush="#FF1D1D1D" Background="White"/>
                 </StackPanel>
                 <StackPanel x:Name="infoContent" Margin="50,20,0,0"/>
             </StackPanel>
