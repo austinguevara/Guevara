@@ -168,7 +168,7 @@ namespace ImgUp
             // Open the file picker.
             Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
 
-            // file is null if user cancels the file picker.
+            // File is null if user cancels the file picker.
             if (file != null)
             {
                 // Open a stream for the selected file.

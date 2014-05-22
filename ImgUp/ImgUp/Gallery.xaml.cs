@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -62,9 +65,39 @@ namespace ImgUp
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            // if (e.PageState != null)
             // TODO: Assign a bindable collection of items to this.DefaultViewModel["Items"]
+            AccessListEntryView entries = StorageApplicationPermissions.MostRecentlyUsedList.Entries;
+            if (entries.Count > 0)
+            {
+                //foreach (AccessListEntry entry in entries)
+                //Get first token in most recently used items list, assign it to "mruFirstToken"
+                String mruFirstToken = StorageApplicationPermissions.MostRecentlyUsedList.Entries[0].Token;
+
+                //Assign the file of first token to "retrievedFile"
+                StorageFile retrievedFile = await StorageApplicationPermissions.MostRecentlyUsedList.GetFileAsync(mruFirstToken);
+                Windows.Storage.Streams.IRandomAccessStream stream = await retrievedFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                this.DataContext = retrievedFile;
+
+                //Check that file is correct filetype
+                if (retrievedFile.FileType == ".bmp" ||
+                    retrievedFile.FileType == ".png" ||
+                    retrievedFile.FileType == ".jpeg" ||
+                    retrievedFile.FileType == ".jpg" ||
+                    retrievedFile.FileType == ".gif")
+                {
+                    //Create new "blank" bitmap
+                    Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
+                            new Windows.UI.Xaml.Media.Imaging.BitmapImage();
+
+                    bitmapImage.SetSource(stream);
+                    Image newImg = new Image();
+                    newImg.Source = bitmapImage;
+                    itemGridView.Items.Add(newImg);
+                }
+            }
         }
 
         #region NavigationHelper registration
