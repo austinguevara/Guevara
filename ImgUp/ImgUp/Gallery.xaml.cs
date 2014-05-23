@@ -70,19 +70,19 @@ namespace ImgUp
         {
             // if (e.PageState != null)
             // TODO: Assign a bindable collection of items to this.DefaultViewModel["Items"]
-            AccessListEntryView entries = StorageApplicationPermissions.MostRecentlyUsedList.Entries;
+            AccessListEntryView entries = StorageApplicationPermissions.FutureAccessList.Entries;
             if (entries.Count > 0)
             {
                 foreach (AccessListEntry entry in entries)
                 {
                     //Get first token in most recently used items list, assign it to "mruFirstToken"
-                    String mruFirstToken = StorageApplicationPermissions.MostRecentlyUsedList.Entries[entryCount].Token;
+                    String mruFirstToken = StorageApplicationPermissions.FutureAccessList.Entries[entryCount].Token;
 
                     //Increment entry count
                     entryCount += 1;
 
                     //Assign the file of first token to "retrievedFile" & create new stream
-                    StorageFile retrievedFile = await StorageApplicationPermissions.MostRecentlyUsedList.GetFileAsync(mruFirstToken);
+                    StorageFile retrievedFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(mruFirstToken);
                     Windows.Storage.Streams.IRandomAccessStream stream = await retrievedFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
                     this.DataContext = retrievedFile;
 

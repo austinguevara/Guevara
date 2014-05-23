@@ -254,6 +254,7 @@ namespace ImgUp.Common
             frameState["Navigation"] = frame.GetNavigationState();
         }
     }
+
     public class SuspensionManagerException : Exception
     {
         public SuspensionManagerException()

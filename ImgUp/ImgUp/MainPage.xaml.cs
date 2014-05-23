@@ -23,6 +23,7 @@ namespace ImgUp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        Windows.Storage.StorageFile file = null;
         int buttonCount = 0;
         private string mruToken = null;
         private NavigationHelper navigationHelper;
@@ -142,7 +143,7 @@ namespace ImgUp
 
         private void PhotoPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (e.NewSize.Height / e.NewSize.Width >= 1)
+            if (e.NewSize.Height / e.NewSize.Width >= 1 || e.NewSize.Width < 1150)
             {
                 VisualStateManager.GoToState(this, "Portrait", true);
             }
@@ -172,19 +173,9 @@ namespace ImgUp
             // File is null if user cancels the file picker.
             if (file != null)
             {
-                // Open a stream for the selected file.
-                Windows.Storage.Streams.IRandomAccessStream fileStream =
-                    await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
-
-                // Set the image source to the selected bitmap.
-                Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-                    new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-
-                bitmapImage.SetSource(fileStream);
-                nullImg.Source = bitmapImage;
+                nullImg.Source = await ImageHandler.imageToBitmap(file);
                 this.DataContext = file;
 
-                mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
                 addToGallery.Content = "Add to Gallery";
                 buttonCount = 0;
             }
@@ -216,11 +207,14 @@ namespace ImgUp
 
         private void addToGallery_Button(object sender, RoutedEventArgs e)
         {
-            //mruToken = Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Add(file);
             if (buttonCount == 0)
             {
-                addToGallery.Content = "Go to Gallery>";
-                buttonCount += 1;
+                if (file != null)
+                {
+                    ImageHandler.addImageToFAL(file);
+                    addToGallery.Content = "Go to Gallery>";
+                    buttonCount += 1;
+                }
             }
             else
             {
