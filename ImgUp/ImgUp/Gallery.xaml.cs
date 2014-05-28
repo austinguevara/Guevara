@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
@@ -66,51 +68,78 @@ namespace ImgUp
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+        }
+
+        private async void populateGallery(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Test");
             // if (e.PageState != null)
             // TODO: Assign a bindable collection of items to this.DefaultViewModel["Items"]
+
             AccessListEntryView entries = StorageApplicationPermissions.FutureAccessList.Entries;
             if (entries.Count > 0)
             {
                 foreach (AccessListEntry entry in entries)
                 {
-                    //Get first token in most recently used items list, assign it to "mruFirstToken"
-                    String mruFirstToken = StorageApplicationPermissions.FutureAccessList.Entries[entryCount].Token;
+                    //New image created
+                    Image newImg = new Image();
+                    
 
-                    //Increment entry count
-                    entryCount += 1;
-
-                    //Assign the file of first token to "retrievedFile" & create new stream
-                    StorageFile retrievedFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(mruFirstToken);
-                    Windows.Storage.Streams.IRandomAccessStream stream = await retrievedFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
-                    this.DataContext = retrievedFile;
-
-                    //Check that file is correct filetype
-                    if (retrievedFile.FileType == ".bmp" ||
-                        retrievedFile.FileType == ".png" ||
-                        retrievedFile.FileType == ".jpeg" ||
-                        retrievedFile.FileType == ".jpg" ||
-                        retrievedFile.FileType == ".gif")
+                    //Use ImageHandler to retrieve image at entryCount and assign image source to bitmap
+                    try
                     {
-                        //Create new "blank" bitmap
-                        Windows.UI.Xaml.Media.Imaging.BitmapImage bitmapImage =
-                                new Windows.UI.Xaml.Media.Imaging.BitmapImage();
-
-                        //Set bitmap's source to newly created steam
-                        bitmapImage.SetSource(stream);
-
-                        //New image created and source assigned to bitmap
-                        Image newImg = new Image();
-                        newImg.Source = bitmapImage;
-                        newImg.Height = 200;
+                        newImg.Source = await ImageHandler.getImage(StorageApplicationPermissions.FutureAccessList.Entries[entryCount].Token);
+                        newImg.Width = 380;
+                        newImg.Height = 220;
+                        newImg.VerticalAlignment = VerticalAlignment.Center;
+                        newImg.HorizontalAlignment = HorizontalAlignment.Center;
+                        newImg.Stretch = Stretch.UniformToFill;
+                        newImg.Tapped += initiatePopout;
 
                         //Item added to grid
                         itemGridView.Items.Add(newImg);
                     }
+                    catch
+                    {
+                        break;
+                    }
+
+                    //Increment entry count
+                    entryCount += 1;
                 }
             }
         }
+
+        private void initiatePopout(object sender, RoutedEventArgs e)
+        {
+            transparentBackdrop.Visibility = Visibility.Visible;
+            Canvas.SetZIndex(transparentBackdrop, 1);
+
+            //DoubleAnimation opacityAnimation = new DoubleAnimation();
+            //opacityAnimation.From = 0.0;
+            //opacityAnimation.To = 0.9;
+            //opacityAnimation.Duration = TimeSpan.FromSeconds(0.5);
+            //opacityAnimation.AutoReverse = true;
+            //Storyboard.SetTargetName(opacityAnimation, "white75");
+
+            Image srcImg = (Image)sender;
+            nullImg.Source = srcImg.Source;
+            this.DataContext = srcImg;
+
+            nullImgPanel.Visibility = Visibility.Visible;
+        }
+
+        private void hidePopout(object sender, RoutedEventArgs e)
+        {
+            transparentBackdrop.Visibility = Visibility.Collapsed;
+            Canvas.SetZIndex(transparentBackdrop, -2);
+            nullImgPanel.Visibility = Visibility.Collapsed;
+        }
+
+
+    }
 
         #region NavigationHelper registration
 
@@ -123,17 +152,17 @@ namespace ImgUp
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedTo(e);
-        }
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    navigationHelper.OnNavigatedTo(e);
+        //}
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            navigationHelper.OnNavigatedFrom(e);
-        }
+        //protected override void OnNavigatedFrom(NavigationEventArgs e)
+        //{
+        //    navigationHelper.OnNavigatedFrom(e);
+        //}
 
         #endregion
 
-    }
 }
+

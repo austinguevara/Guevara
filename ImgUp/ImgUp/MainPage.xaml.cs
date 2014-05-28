@@ -23,8 +23,7 @@ namespace ImgUp
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Windows.Storage.StorageFile file = null;
-        int buttonCount = 0;
+        public int buttonCount = 0;
         private string mruToken = null;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -167,14 +166,14 @@ namespace ImgUp
             openPicker.FileTypeFilter.Add(".jpg");
             openPicker.FileTypeFilter.Add(".gif");
 
-            // Open the file picker.
-            Windows.Storage.StorageFile file = await openPicker.PickSingleFileAsync();
+            // initialize file picker
+            ImageHandler.Initialize(await openPicker.PickSingleFileAsync());
 
             // File is null if user cancels the file picker.
-            if (file != null)
+            if (ImageHandler.File != null)
             {
-                nullImg.Source = await ImageHandler.imageToBitmap(file);
-                this.DataContext = file;
+                nullImg.Source = await ImageHandler.ImageToBitmap();
+                this.DataContext = ImageHandler.File;
 
                 addToGallery.Content = "Add to Gallery";
                 buttonCount = 0;
@@ -209,18 +208,17 @@ namespace ImgUp
         {
             if (buttonCount == 0)
             {
-                if (file != null)
-                {
-                    ImageHandler.addImageToFAL(file);
-                    addToGallery.Content = "Go to Gallery>";
-                    buttonCount += 1;
-                }
+
+                ImageHandler.AddImageToFAL();
+                addToGallery.Content = "Go to Gallery>";
+                buttonCount += 1;
+
             }
             else
             {
                 this.Frame.Navigate(typeof(Gallery));
             }
-            
+
         }
     }
 }

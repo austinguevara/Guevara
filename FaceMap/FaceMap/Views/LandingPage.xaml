@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="FaceMap.Views.LandingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FaceMap.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#FF3B5998">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="208*"/>
+                <ColumnDefinition Width="475*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                <Grid x:Name="WithWhomGrid" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image HorizontalAlignment="Center" Height="150" VerticalAlignment="Center" Width="150"  Grid.Column="0" Stretch="None" Source="ms-appx:///Assets/friend-image.png" />
+                    <StackPanel Grid.Column="1">
+                        <TextBlock TextWrapping="Wrap" Text="Who are you with?" FontFamily="Segoe UI" FontSize="48"/>
+                        <TextBlock x:Name="selectFriendsTextBox" TextWrapping="Wrap" Text="Select Friends" FontFamily="Segoe UI" FontSize="26.667" Foreground="#FF6DB7C7" Tapped="selectFriendsTextBox_Tapped"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border x:Name="MyImageFrame" Height="150" Width="150">
+                    <Image x:Name="MyImage" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock x:Name="MyName" TextWrapping="Wrap" Text="TextBlock" FontFamily="Segoe UI" FontSize="29.333"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

@@ -105,8 +105,8 @@ namespace ImgUp
 
         private void deleteGallery_Button(object sender, RoutedEventArgs e)
         {
-            Windows.Storage.AccessCache.StorageApplicationPermissions.MostRecentlyUsedList.Clear();
-            greetingOutput.Text = "All images have been deleted from the gallery.";
+            Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Clear();
+            greetingOutput2.Text = "All images have been deleted from the gallery.";
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

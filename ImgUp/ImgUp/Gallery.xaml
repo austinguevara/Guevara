@@ -9,13 +9,18 @@
     x:Name="pageRoot"
     x:Class="ImgUp.Gallery"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Mode=Self}}"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="populateGallery">
 
     <Page.Resources>
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
         x:Name="itemsViewSource"
         Source="{Binding Items}"/>
+
+        <SolidColorBrush 
+            x:Key="white75"
+            Color="Black" 
+            Opacity="0.75"/>
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Image Gallery</x:String>
@@ -27,6 +32,18 @@
         * Row 1 contains the rest of the page layout
     -->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualStateGroup.Transitions>
+                    <VisualTransition GeneratedDuration="0:0:1">
+                        <VisualTransition.GeneratedEasingFunction>
+                            <BackEase EasingMode="EaseInOut"/>
+                        </VisualTransition.GeneratedEasingFunction>
+                    </VisualTransition>
+                </VisualStateGroup.Transitions>
+                <VisualState x:Name="VisualState"/>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -37,6 +54,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Horizontal scrolling grid -->
+        <!-- Horizontal scrolling grid -->
         <!-- Horizontal scrolling grid -->
         <GridView
 			x:Name="itemGridView"
@@ -62,6 +81,40 @@
 				AutomationProperties.ItemType="Navigation Button"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
 				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+        </Grid>
+        <Grid x:Name="solidBackdrop" Grid.RowSpan="2" Canvas.ZIndex="-1" Background="#FF1D1D1D"/>
+        <Grid x:Name="transparentBackdrop" Grid.RowSpan="2" Canvas.ZIndex="-2" Background="{StaticResource white75}" Visibility="Collapsed">
+            <StackPanel x:Name="nullImgPanel" Orientation="Horizontal" Margin="60" Height="448" Width="1186" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+                <Button x:Name="leftButton" Content="&lt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Border BorderThickness="1" Width="700">
+                    <Image x:Name="nullImg" Source="Assets/nullImg.png" VerticalAlignment="Center" Stretch="UniformToFill" HorizontalAlignment="Center"/>
+                </Border>
+                <StackPanel x:Name="infoLabel" Margin="20,20,0,0">
+                    <Button Content="FILENAME" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+            			Background="#FF00A0B1" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0" 
+            			FontSize="20" Width="250" IsHitTestVisible="False"/>
+
+                    <TextBlock x:Name="fileName" TextWrapping="Wrap" Text="{Binding Name}" 
+            			Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,50"/>
+
+                    <Button Content="PATH" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+            			Background="#FF00A0B1" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0" 
+            			FontSize="20" Width="250" IsHitTestVisible="False"/>
+
+                    <TextBlock x:Name="path" TextWrapping="Wrap" Text="{Binding Path}" 
+            			Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,50"/>
+
+                    <Button Content="DATE CREATED" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+            			Background="#FF00A0B1" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0" 
+            			FontSize="20" Width="250" IsHitTestVisible="False"/>
+
+                    <TextBlock x:Name="dateCreated" TextWrapping="Wrap" Text="{Binding DateCreated.Date}" 
+            			Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,50"/>
+                </StackPanel>
+                <StackPanel x:Name="infoContent" Margin="50,20,0,0"/>
+                <Button x:Name="xButton" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Click="hidePopout"/>
+                <Button x:Name="rightButton" Content="&gt;" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

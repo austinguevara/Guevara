@@ -69,7 +69,7 @@
             <ScrollViewer Grid.Row="2">
                 <StackPanel x:Name="nullImgPanel" Orientation="Horizontal" Margin="0" Height="448" Width="1186" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Border BorderThickness="1" Width="700">
-                        <Image x:Name="nullImg" Source="Assets/nullImg.png" VerticalAlignment="Top"/>
+                        <Image x:Name="nullImg" Source="Assets/nullImg.png" VerticalAlignment="Center" Stretch="UniformToFill" HorizontalAlignment="Center"/>
                     </Border>
                     <StackPanel x:Name="infoLabel" Margin="20,20,0,0">
                         <Button Content="FILENAME" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="#FF00A0B1" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0" FontSize="20" Width="250" IsHitTestVisible="False"/>
