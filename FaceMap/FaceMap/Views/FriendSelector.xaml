@@ -12,7 +12,6 @@ DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Mode=Self
 mc:Ignorable="d">
 
     <Page.Resources>
-
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Select Friends</x:String>
         <DataTemplate x:Key="FriendsListBoxItemTemplate">
@@ -21,16 +20,18 @@ mc:Ignorable="d">
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Image Height="50" Width="50" Grid.Column="0" Stretch="None" Source="{Binding PictureUri}"/>
-                <TextBlock x:Name="friendName" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" FontFamily="Segoe UI" FontSize="26.667" Grid.ColumnSpan="2" Grid.Column="1"/>
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Height="151">
+                    <Image Height="50" Width="50" Grid.Column="0" Stretch="None" Source="{Binding PictureUri}" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+                    <TextBlock x:Name="friendName" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Stretch" FontFamily="Segoe UI" FontSize="26.667" Grid.ColumnSpan="2" Grid.Column="1"/>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
     <Page.TopAppBar>
-        <CommandBar Foreground="White" BorderBrush="{x:Null}" Background="{x:Null}">
-            <AppBarButton Icon="Back" Label="Go Back" Foreground="White" Click="GoBack_Button"/>
-            <AppBarButton Icon="Map" Label="Maps" Click="Maps_Button"/>
+        <CommandBar BorderThickness="0,0,0,2" RequestedTheme="Light">
+            <AppBarButton Icon="Back" Label="Go Back" Click="GoBack_Button" RequestedTheme="Light"/>
+            <AppBarButton Icon="Map" Label="Maps" Click="Maps_Button" RequestedTheme="Light"/>
         </CommandBar>
     </Page.TopAppBar>
 
@@ -39,9 +40,9 @@ mc:Ignorable="d">
     * Row 0 contains the back button and page title
     * Row 1 contains the rest of the page layout
 -->
-    <Grid>
+    <Grid Background="#FF3B5998">
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="140" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -60,18 +61,6 @@ mc:Ignorable="d">
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
-
-                <!-- The back button and title have different styles when snapped -->
-                <VisualState x:Name="Snapped">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" />
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" />
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid.DataContext>
@@ -84,7 +73,8 @@ mc:Ignorable="d">
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" />
         </Grid>-->
-        <ListBox x:Name="friendsListBox" Grid.Row="1" ItemsSource="{Binding Friends}" ItemTemplate="{StaticResource FriendsListBoxItemTemplate}" SelectionMode="Multiple"/>
+        <GridView x:Name="friendsGridView" Grid.Row="1" ItemsSource="{Binding Friends}" ItemTemplate="{StaticResource FriendsListBoxItemTemplate}" SelectionMode="Multiple"/>
+        <TextBlock TextWrapping="Wrap" Text="Select Friends" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource HeaderTextBlockStyle}"/>
 
     </Grid>
 </Page>

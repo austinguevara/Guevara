@@ -66,7 +66,7 @@
             </Grid.RowDefinitions>
             <Button Content="Select New Image" Click="GetPhotoButton_Click" FontSize="28" Height="56"/>
             <TextBlock x:Name="imageTitle" Grid.Row="1" TextWrapping="Wrap" Text="{Binding DisplayName}" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            <ScrollViewer Grid.Row="2">
+            <GridView Grid.Row="2">
                 <StackPanel x:Name="nullImgPanel" Orientation="Horizontal" Margin="0" Height="448" Width="1186" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Border BorderThickness="1" Width="700">
                         <Image x:Name="nullImg" Source="Assets/nullImg.png" VerticalAlignment="Center" Stretch="UniformToFill" HorizontalAlignment="Center"/>
@@ -82,7 +82,7 @@
                     </StackPanel>
                     <StackPanel x:Name="infoContent" Margin="50,20,0,0"/>
                 </StackPanel>
-            </ScrollViewer>
+            </GridView>
         </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
